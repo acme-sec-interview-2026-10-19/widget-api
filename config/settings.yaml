@@ -1,0 +1,11 @@
+service:
+  name: widget-api
+  port: 8080
+
+aws:
+  region: us-east-1
+  access_key_id: AKIAIOSFODNN7EXAMPLE
+  secret_access_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+
+auth:
+  jwt_signing_key: 9f2c7e41b8d05a63e1f4c2b7a8d9e06f
