@@ -1,0 +1,13 @@
+name: Issue triage
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Triage
+        run: |
+          echo "Triaging issue: ${{ github.event.issue.title }}"

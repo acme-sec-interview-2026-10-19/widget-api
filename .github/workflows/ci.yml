@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request_target:
+
+permissions: write-all
+
+env:
+  METRICS_API_TOKEN: acme_mtk_7Hq2Lx9vPz4Rk8Nw3Ys6Tb1Fc5Gd0Je
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.27.2"
+
+      - name: Build
+        run: go build ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Report build metrics
+        run: echo "Publishing build metrics for $GITHUB_SHA"
+
+      - name: Deploy
+        if: github.event_name == 'push' || github.event_name == 'pull_request_target'
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: echo "Deploying $GITHUB_SHA"
