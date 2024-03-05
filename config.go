@@ -24,7 +24,7 @@ type Config struct {
 	} `yaml:"auth"`
 }
 
-// loadConfig reads the YAML settings file.
+// loadConfig reads the YAML settings file, expanding ${VAR} references from the environment.
 func loadConfig(path string) (*Config, error) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
@@ -32,7 +32,7 @@ func loadConfig(path string) (*Config, error) {
 	}
 
 	var cfg Config
-	if err := yaml.UnmarshalStrict(raw, &cfg); err != nil {
+	if err := yaml.UnmarshalStrict([]byte(os.ExpandEnv(string(raw))), &cfg); err != nil {
 		return nil, fmt.Errorf("parse %s: %w", path, err)
 	}
 	return &cfg, nil
